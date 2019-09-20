@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.edu.dao.StudentDao"> 
+	<select id="findStudentById" parameterType="String"
+		resultType="student">
+		select * from tb_buser where id = #{id}
+	</select>
+	
+	<select id="findStudentByIdAndPassword" parameterType="student"
+		resultType="student">
+		select * from tb_buser where id = #{id} and password=#{password}
+	</select>
+	
+	
+	
+<!-- 	<select id="findStudentById5" parameterType="String" -->
+<!-- 		resultMap="resultStudent5"> -->
+<!-- 		select c.*, s.id as s_id,s.username,s.classs,s.phone,s.password as s_password -->
+<!-- 		from tb_course c,tb_student s,tb_course_table ct  -->
+<!-- 		where  -->
+<!-- 		c.id=ct.course_id and s.id=ct.student_id -->
+<!-- 		and s.id = #{id} -->
+<!-- 	</select> -->
+	
+	<resultMap id="resultStudent5" type="student">
+		<id property="id" column="s_id"/>
+		<result property="username" column="username"></result>	
+		<result property="password" column="password"></result>
+	
+	</resultMap>
+	
+	
+	
+	
+	<select id="findStudentByName" parameterType="String"
+		resultType="student">
+		<bind name="pattern_username" value="'%'+value+'%'" />
+		select * from tb_buser where username like #{pattern_username} 
+	</select>
+	
+	
+	<select id="findStudentByCond" parameterType="student"
+		resultType="student">
+	     select * from tb_student where 1=1 
+		     <if test="username !=null and username !=''">
+		     <bind name="pattern_username" value="'%'+_parameter.getUsername()+'%'" />
+				and username like #{pattern_username} 
+		     </if>
+		     <if test="password !=null and password!=''">
+				and password= #{password}
+		     </if>
+	</select>
+	
+	<select id="findStudentByCond1" parameterType="student"
+		resultType="student">
+	     select * from tb_buser where 1=1 
+		     <choose>
+		     	<when test="username !=null and username !=''">
+		     		<bind name="pattern_username" value="'%'+_parameter.getUsername()+'%'" />
+		     		and username like #{pattern_username} 
+		     	</when>
+		     	<when test="password !=null and password !=''">
+		     		<bind name="pattern_password" value="'%'+_parameter.getPassword()+'%'" />
+		     		and password like #{pattern_password} 
+		     	</when>
+
+		     </choose>
+	</select>
+	
+	
+	<select id="findStudentByCond2" parameterType="student"
+		resultType="student">
+	     select * from tb_buser
+	      <where>
+		     <if test="id !=null and id !=''">
+		    	 <bind name="pattern_id" value="'%'+_parameter.getId()+'%'" />
+				and id like #{pattern_id}
+		     </if>
+		     <if test="password !=null and password !=''">
+		     	<bind name="pattern_password" value="'%'+_parameter.getPassword()+'%'" />
+				and password= #{pattern_password}
+		     </if>
+	     </where>
+	</select>
+	
+	<select id="findStudentCountByCond2" parameterType="student"  resultType="int">     <!--  查询 -->
+     	select count(*) from tb_buser
+      <where>
+	     <if test="username !=null and username !=''">
+	    	 <bind name="pattern_username" value="'%'+_parameter.getUsername()+'%'" />
+			and username like #{pattern_username}
+	     </if>
+	   
+     </where>
+	</select>
+	
+	<select id="findStudentByIds" parameterType="List" 
+		resultType="student">
+		select * from tb_buser where id in
+		<foreach item="id" collection="array"
+			open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+	
+	<select id="findStudentByIds1" parameterType="List" 
+		resultType="student">
+		select * from password where id in
+		<foreach item="id" collection="array"
+			open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+	
+	<select id="findStudentByIds2" parameterType="Map" 
+		resultType="student">
+		select * from tb_buser where id in
+		<foreach item="id" collection="ids"
+			open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+	<select id="findStudentByIds3" parameterType="student" 
+		resultType="student">
+		select * from tb_buser where id in
+		<foreach item="id" collection="idsList"
+			open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+	<insert	id="addStudent" parameterType="student" >    <!-- 插入 -->
+		insert into tb_buser(username,password)
+			values(#{username},#{password})
+	</insert>
+	
+	<update	id="updateStudent" parameterType="student">
+		update tb_buser set 
+			<if test="username!=null">
+				username=#{username},
+			</if>
+			<if test="password!=null">
+				password=#{classs},
+			</if>
+
+		where id=#{id}
+	</update>
+	
+	<update	id="updateStudent1" parameterType="student">  <!-- 修改 -->
+		update tb_buser
+			<set>
+				<if test="username !=null ">
+					username=#{username},
+				</if>
+				<if test="password !=null ">
+					password=#{password},
+				</if>
+
+			</set> 
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteStudent" parameterType="String">  <!--  删除 -->
+		delete from tb_buser where id=#{id}
+	</delete>
+	
+	
+	
+</mapper>
+   

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.dao.OrderDao">
+	<!-- 添加一个订单，成功后将主键值回填给id（po类的属性）-->
+	<insert id="addOrder" parameterType="Order" keyProperty="id" useGeneratedKeys="true">
+		insert into tb_orderbase (busertable_id, amount, status, orderdate) values (#{busertable_id}, #{amount}, 0, null)
+	</insert>
+	<!-- 生成订单详情 -->
+	<insert id="addOrderDetail" parameterType="map">
+		insert into TB_ORDERDETAIL (orderbasetable_id, goodstable_id, SHOPPINGNUM) select #{ordersn}, goodstable_id, SHOPPINGNUM from TB_CART where busertable_id = #{uid} 
+	</insert>
+	<!-- 查询商品购买量，以便更新库存使用 -->
+	<select id="selectGoodsShop"  parameterType="Integer" resultType="map">
+		select shoppingnum gshoppingnum, goodstable_id gid from tb_cart where busertable_id=#{uid}
+	</select>
+	<!-- 更新商品库存 -->
+	<update id="updateStore" parameterType="map">
+		update TB_GOODS  set GSTORE=GSTORE-#{gshoppingnum} where id=#{gid} 
+	</update>
+	<!-- 清空购物车 -->
+	<delete id="clear" parameterType="Integer">
+		delete from tb_cart where busertable_id=#{uid} 
+	</delete>
+	<!-- 支付订单 -->
+	<update id="pay" parameterType="Integer">
+		update tb_orderbase set status=1 where id=#{ordersn}
+	</update>
+</mapper>

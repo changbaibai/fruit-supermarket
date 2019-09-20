@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.dao.AdminOrderDao">
+	<select id="orderInfo"  resultType="map" >
+		select ot.id, ot.amount, ot.status,  orderdate, bt.username, ot.busertable_id 
+		from TB_ORDERBASE ot, TB_BUSER bt where ot.busertable_id=bt.id
+	</select>
+	<delete id="deleteOrderDetail" parameterType="Integer">
+		delete from tb_orderdetail where orderbasetable_id=#{id}
+	</delete>
+	<delete id="deleteOrderBase" parameterType="Integer">
+		delete from tb_orderbase where id=#{id}
+	</delete>
+</mapper>
