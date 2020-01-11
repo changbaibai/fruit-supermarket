@@ -10,4 +10,4 @@
 ![image](https://github.com/changbaibai/show/blob/master/images/26.png)
 ![image](https://github.com/changbaibai/show/blob/master/images/27.png)
 ![image](https://github.com/changbaibai/show/blob/master/images/28.png)
-![image](https://github.com/changbaibai/show/blob/master/images/29.png)
+
